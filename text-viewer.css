@@ -1,0 +1,66 @@
+p {
+	margin: 0;
+}
+
+.text-viewer-container {
+	position: relative;
+	width: 470px;
+	height: 600px;
+	margin-top: 50px;
+	margin-left: 33px;
+}
+
+.viewer-button-container {
+	width: 470px;
+	height: 50px;
+}
+
+.viewer-button {
+	width: 50px;
+	height: 50px;
+	background-color: black;
+	position: absolute;
+	left: 50%;
+	color: white;
+}
+
+.hidden {
+	display: none;
+}
+
+#left-button {
+	margin-left: -55px;
+}
+
+#right-button {
+	margin-left: 0px;
+}
+
+#all-button,
+#none-button {
+	margin-left: -25px;
+	margin-top: -50px;
+}
+
+.text-container {
+	width: 0;
+	margin: -25px auto 0 ;
+	text-align: left;
+	padding-bottom: 50px;
+}
+
+.viewer-intro {
+	margin-left: -20px;
+}
+
+.text-container > div {
+	padding: 25px 15px;
+}
+
+.colourA {
+	background-color: lightblue;
+}
+
+.colourB {
+	background-color: lightgreen;
+}
