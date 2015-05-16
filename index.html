@@ -12,16 +12,16 @@
 </head>
 <body>
 
-	<div class="text-viewer-container">
-		<div class="viewer-button-container">
+	<div id="text-viewer-container">
+		<div id="viewer-button-container">
 			<img class="viewer-button" id="left-button" src="" alt="left">
 			<img class="viewer-button" id="right-button" src="" alt="right">
 		</div>
 		
-		<div class="text-container">
-			<div class="hidden" id="left-text">
-				<ul>
-					<p class="viewer-intro">Intro</p><br>
+		<div id="text-container">
+			<div class="text-box" id="left-text">
+				<ul class="hidden text-list">
+					<p class="viewer-intro">Left box intro</p><br>
 					<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
 					<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
 					<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
@@ -29,9 +29,11 @@
 					<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
 				</ul>
 			</div>
-			<div class="hidden" id="right-text">
-				<ul>
-					<p class="viewer-intro">Intro</p><br>
+			<div  class="text-box" id="right-text">
+				<ul class="hidden text-list">
+					<p class="viewer-intro">Right box intro</p><br>
+					<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
+					<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
 					<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
 					<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
 					<li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
@@ -40,8 +42,8 @@
 				</ul>
 			</div>
 		</div>
-		<img class="viewer-button" id="all-button" src="" alt="all">
-		<img class="viewer-button hidden" id="none-button" src="" alt="none">
+		<img class="bottom-button" id="all-button" src="" alt="all">
+		<img class="bottom-button hidden" id="none-button" src="" alt="none">
 		
 	</div>
 	
