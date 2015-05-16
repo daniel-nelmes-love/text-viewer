@@ -1,10 +1,10 @@
 /* Button dimensions */
 .viewer-button {
-	width: 70px;
-	height: 70px;
+	width: 100px;
+	height: 100px;
 }
 .bottom-button {
-	width: 100px;
+	width: 110px;
 	height: 50px;
 }
 
@@ -12,11 +12,10 @@
 #text-viewer-container {
 	position: relative;
 	margin-top: 50px;
-	margin-left: 33px;
+	margin-left: 50px;
 }
 .viewer-button,
 .bottom-button {
-	background-color: black;
 	position: absolute;
 	left: 50%;
 	color: white;
