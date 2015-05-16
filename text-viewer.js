@@ -45,14 +45,14 @@ function setLayout() {
 		"margin-bottom": -(viewerButtonHeight/2+viewerButtonYadjust)
 	});
 	$('#left-button').css({
-		"margin-left": -(viewerButtonWidth+buttonSpacing)
+		"margin-left": -(viewerButtonWidth+buttonSpacing+viewerButtonXadjust)
 	});
 	$('#right-button').css({
-		"margin-left": 0
+		"margin-left": 0+viewerButtonXadjust
 	});
 	$('.bottom-button').css({
 		"margin-left": -bottomButtonWidth/2-(bottomButtonXadjust+buttonSpacing/2),
-		"margin-top": (bottomShift-bottomButtonYadjust)+viewerButtonHeight/2
+		"margin-top": 0-bottomButtonYadjust
 	});
 }
 // Button click listeners
