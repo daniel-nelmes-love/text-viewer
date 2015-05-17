@@ -50,6 +50,7 @@
 }
 .double-view {
 	display: inline-flex;
+	display: -webkit-inline-flex;
 }
 .shift-left {
 	margin-left: 4px;
