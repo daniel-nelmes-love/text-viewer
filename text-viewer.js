@@ -31,7 +31,10 @@ function getValues() {
 	viewerButtonHeight	= $('.viewer-button').height();
 	bottomButtonWidth	= $('.bottom-button').width();
 	bottomButtonHeight	= $('.bottom-button').height();
-	bottomShift = -bottomButtonHeight*0.5;
+	bottomShift = -bottomButtonHeight*0.5; 
+	bottomAcrossDouble = -bottomButtonWidth/2-bottomButtonXadjust;
+	bottomAcross = bottomAcrossDouble-buttonSpacing/2;
+
 }
 // Dynamic layout
 function setLayout() {
@@ -51,7 +54,7 @@ function setLayout() {
 		"margin-left": 0+viewerButtonXadjust
 	});
 	$('.bottom-button').css({
-		"margin-left": -bottomButtonWidth/2-(bottomButtonXadjust+buttonSpacing/2),
+		"margin-left": bottomAcross,
 		"margin-top": 0-bottomButtonYadjust
 	});
 }
@@ -100,7 +103,7 @@ function singleViewer(selectedEle) {
 	};
 	var leftShift = -(textWidth/2)-(viewerButtonWidth/2)-viewerButtonXadjust
 	var rightShift = (textWidth/2)-(viewerButtonWidth/2)+viewerButtonXadjust
-	animateButtons(leftShift, rightShift, bottomShift);
+	animateButtons(leftShift, rightShift, bottomShift, bottomAcross);
 	$(selectedEle).animate({
 		"width": textWidth,
 		"height": textHeight
@@ -115,13 +118,13 @@ function singleViewer(selectedEle) {
 // Displays both tabs of information
 function doubleViewer() {
 	var containerWidth = fullWidth-viewerButtonWidth
-	var textBox = containerWidth/2-5
-	var leftShift = -(containerWidth/2)-(viewerButtonWidth/2-(5+viewerButtonXadjust))
-	var rightShift = (containerWidth/2)-(viewerButtonWidth/2+(5+viewerButtonXadjust))
+	var textBox = containerWidth/2-4
+	var leftShift = -(containerWidth/2)-(viewerButtonWidth/2-(viewerButtonXadjust))
+	var rightShift = (containerWidth/2)-(viewerButtonWidth/2+(viewerButtonXadjust))
 	$('.text-box').addClass('double-view');
 	$('#left-text').addClass('shift-left');
 	$('#right-text').addClass('shift-right');
-	animateButtons(leftShift, rightShift, bottomShift);
+	animateButtons(leftShift, rightShift, bottomShift, bottomAcrossDouble);
 	$('#left-text').animate({
 		"width": textBox,
 		"height": fullHeight
@@ -140,7 +143,7 @@ function doubleViewer() {
 }
 // Closes all tabs
 function closeViewer(fullClose, viewer, selectedEle) {
-	animateButtons(-(viewerButtonWidth+5), 0, 0);
+	animateButtons(-(viewerButtonWidth+buttonSpacing), 0, 0, bottomAcross);
 	function minimiseEle(thisEle) {
 		$(thisEle).animate({
 			"width": 0,
@@ -169,11 +172,17 @@ function closeViewer(fullClose, viewer, selectedEle) {
 	});
 }
 // Moves buttons based on arguments
-function animateButtons(leftShift, rightShift, bottomShift) {
+function animateButtons(leftShift, rightShift, bottomShift, bottomX) {
 	$('#left-button').animate({"margin-left":leftShift});
 	$('#right-button').animate({"margin-left":rightShift});
-	$('#all-button').animate({"margin-top": bottomShift});
-	$('#none-button').animate({"margin-top": bottomShift});
+	$('#all-button').animate({
+		"margin-top": bottomShift,
+		"margin-left": bottomX
+	});
+	$('#none-button').animate({
+		"margin-top": bottomShift,
+		"margin-left": bottomX
+	});
 }
 // Selects which bottom button to show
 function bottomButton(hideThis, showThis) {
