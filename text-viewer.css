@@ -11,8 +11,8 @@
 /* Start of generic layout */
 #text-viewer-container {
 	position: relative;
-	margin-top: 50px;
-	margin-left: 50px;
+	margin-top: 200px;
+	margin-left: 200px;
 }
 .viewer-button,
 .bottom-button {
@@ -37,10 +37,10 @@
 	margin-bottom: 7px;
 	padding-right: 25px;
 }
-#left-text {
+#left-button-text {
 	background-color: lightblue;
 }
-#right-text {
+#right-button-text {
 	background-color: lightgreen;
 }
 .viewer-intro {
@@ -56,5 +56,5 @@
 	margin-left: 4px;
 }
 .shift-right {
-	margin-left: -4px; 
+	margin-left: -4px;
 }
