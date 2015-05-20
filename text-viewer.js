@@ -1,191 +1,233 @@
-// All values are in px
-// Single viewer dimensions
-textWidth		= 400
-leftHeight		= 350
-rightHeight		= 450
-// Double viewer dimensions
-fullWidth 		= 550
-fullHeight		= 550
+// Basic Layout //
+textContainerWidth	= 550
+textContainerHeight	= 600
+leftHeight			= 350
+rightHeight			= 450
+doubleHeight		= 550
+buttonSpacing		= 5
 
-// Adjustments to button layout
-// Gap between buttons
-buttonSpacing	= 5
-// Top buttons moving further away from the center
-viewerButtonXadjust	= 0
-// Bottom button moving further to the left
-bottomButtonXadjust	= 0
-// Buttons moving further upwards
-viewerButtonYadjust	= 0
-bottomButtonYadjust	= 0
+// Closed Buttons //
+closedLeftX			= 0
+closedLeftY			= 0
+closedRightX		= 0
+closedRightY		= 0
+closedBottomX		= 0
+closedBottomY		= 0
+
+// Open Buttons //
+openLeftX			= 0
+openLeftY			= 0
+openRightX			= 0
+openRightY			= 0
+openBottomX			= 0
+openBottomLeftY		= 0
+openBottomRightY	= 0
+openBottomAllY		= 0
+
+
+
 
 $(document).ready(function() {
-	getValues();
-	setLayout();
+	setUp();
 	buttonClick();
 });
 
-// Start of functions
-// get button dimensions
-function getValues() {
+function setUp() {
 	viewerButtonWidth	= $('.viewer-button').width();
 	viewerButtonHeight	= $('.viewer-button').height();
 	bottomButtonWidth	= $('.bottom-button').width();
 	bottomButtonHeight	= $('.bottom-button').height();
-	bottomShift = -bottomButtonHeight*0.5; 
-	bottomAcrossDouble = -bottomButtonWidth/2-bottomButtonXadjust;
-	bottomAcross = bottomAcrossDouble-buttonSpacing/2;
+	// Viewer Sizing //
+	textBoxDrop			= viewerButtonHeight/2;
+	textBoxWidth		= textContainerWidth-viewerButtonWidth;
+	leftTextBoxHeight	= leftHeight;
+	rightTextBoxHeight	= rightHeight;
+	allTextBoxHeight	= textContainerHeight-textBoxDrop;
+	// Closed Button Position //
+	closedLeftX		= -(viewerButtonWidth+buttonSpacing/2)-closedLeftX;
+	closedRightX	= 0+buttonSpacing/2+closedRightX;
+	closedLeftY		= -viewerButtonHeight/2-closedLeftY;
+	closedRightY	= -viewerButtonHeight/2-closedRightY;
+	closedBottomX	= -bottomButtonWidth/2-closedBottomX;
+	closedBottomY	= viewerButtonHeight-(bottomButtonHeight+closedBottomY);
+	// Open Button Position //
+	openLeftX		= -textContainerWidth/2-openLeftX;
+	openRightX		= textContainerWidth/2-viewerButtonWidth+openRightX;
+	openLeftY		= -viewerButtonHeight/2-openLeftY;
+	openRightY		= -viewerButtonHeight/2-openRightY;
+	openBottomX		= -bottomButtonWidth/2-openBottomX;
+	openBottomY		= closedBottomX+bottomButtonHeight*1.5
+	openBottomLeftY	= openBottomY+leftTextBoxHeight;
+	openBottomRightY= openBottomY+rightTextBoxHeight;
+	openBottomAllY	= openBottomY+allTextBoxHeight;
+	
 
-}
-// Dynamic layout
-function setLayout() {
 	$('#text-viewer-container').css({
-		"width":fullWidth-viewerButtonWidth,
-		"height": fullHeight
+		"width":textContainerWidth,
+		"height": textContainerHeight
 	});
 	$('#viewer-button-container').css({
-		"width": fullWidth-viewerButtonWidth,
+		"width": textContainerWidth,
 		"height": viewerButtonHeight,
-		"margin-bottom": -(viewerButtonHeight/2+viewerButtonYadjust)
+		"margin-top": -textBoxDrop
+	});
+	$('#text-container').css({
+		"margin-top": -textBoxDrop
 	});
 	$('#left-button').css({
-		"margin-left": -(viewerButtonWidth+buttonSpacing+viewerButtonXadjust)
+		"margin-left": closedLeftX
 	});
 	$('#right-button').css({
-		"margin-left": 0+viewerButtonXadjust
+		"margin-left": closedRightX
 	});
 	$('.bottom-button').css({
-		"margin-left": bottomAcross,
-		"margin-top": 0-bottomButtonYadjust
+		"margin-left": closedBottomX,
+		"margin-top": closedBottomY
 	});
 }
+
 // Button click listeners
 function buttonClick() {
 	$('.viewer-button').on('click', function() {
-		if ($(this).is('#left-button')) {
-			checkStatus('#left-text', '#right-text');
-		} else if ($(this).is('#right-button')) {
-			checkStatus('#right-text', '#left-text');
-		};
+		var TargId = $(this).attr('id');
+		checkStatus(TargId);
 	});
-	$('.bottom-button').on('click', function() {
-		if ($(this).is('#all-button')) {
-			if ($('#left-text').children('ul').hasClass('hidden') &&
-			 $('#right-text').children('ul').hasClass('hidden')) {
-				doubleViewer();
-			} else {
-				closeViewer(false, 'double');
-			};
-		} else if ($(this).is('#none-button')) {
-			closeViewer(true)
-		};
+	$('#none-button').on('click', function() {
+		closeButtons();
+		closeViewer();
+	});
+	$('#all-button').on('click', function() {
+		if ($('#left-button-text').children('ul').hasClass('hidden') &&
+			 $('#right-button-text').children('ul').hasClass('hidden')) {
+			openButtons(openBottomAllY);
+			doubleViewer();
+		} else {
+			closeButtons();
+			closeViewer();
+			openButtons(openBottomAllY);
+			doubleViewer();
+		}
 	});
 }
 // Checks if button's information was hidden
-function checkStatus(selectedEle, otherEle) {
+function checkStatus(TargId) {
+	if (TargId=='left-button') {
+		var OppId = 'right-button';
+		var bottomY = openBottomLeftY;
+		var boxHeight = leftTextBoxHeight;
+	} else {
+		var OppId = 'left-button';
+		var bottomY = openBottomRightY;
+		var boxHeight = rightTextBoxHeight;
+	};
+
 	if ($('#all-button').hasClass('hidden')) {
-		closeViewer(false, 'single', selectedEle);
-	} else if ($(selectedEle).children('ul').hasClass('hidden')) {
-		if ($(otherEle).children('ul').hasClass('hidden')) {
-			singleViewer(selectedEle);
+		closeButtons();
+		closeViewer();
+		openButtons(bottomY);
+		singleViewer(TargId, boxHeight);
+	} else if ($('#'+TargId+'-text').children('ul').hasClass('hidden')) {
+		if ($('#'+OppId+'-text').children('ul').hasClass('hidden')) {
+			openButtons(bottomY);
+			singleViewer(TargId, boxHeight);
 		} else {
-			closeViewer(false, 'single', selectedEle);
+			closeButtons();
+			closeViewer();
+			openButtons(bottomY);
+			singleViewer(TargId, boxHeight);
 		};
 	} else {
-		closeViewer(true);
+		closeButtons();
+		closeViewer();
 	};
+}
+function closeButtons() {
+	$('#left-button').animate({"margin-left": closedLeftX});
+	$('#right-button').animate({"margin-left": closedRightX});
+	$('.bottom-button').animate({"margin-top": closedBottomY});
+}
+// Moves buttons based on arguments
+function openButtons(bottomY) {
+	$('#left-button').animate({"margin-left": openLeftX});
+	$('#right-button').animate({"margin-left": openRightX});
+	$('.bottom-button').animate({
+		"margin-left": openBottomX,
+		"margin-top": bottomY
+	});
 }
 // Display's a single tab of information
-function singleViewer(selectedEle) {		
-	if (selectedEle === '#left-text') {
-		var textHeight = leftHeight
-	} else {
-		var textHeight = rightHeight
-	};
-	var leftShift = -(textWidth/2)-(viewerButtonWidth/2)-viewerButtonXadjust
-	var rightShift = (textWidth/2)-(viewerButtonWidth/2)+viewerButtonXadjust
-	animateButtons(leftShift, rightShift, bottomShift, bottomAcross);
-	$(selectedEle).animate({
-		"width": textWidth,
-		"height": textHeight
+function singleViewer(TargId, boxHeight) {
+	$('.text-box').removeClass('double-view');
+	$('#left-button-text').removeClass('shift-left');
+	$('#right-button-text').removeClass('shift-right');
+	$('#'+TargId+'-text').animate({
+		"width": textBoxWidth,
+		"height": boxHeight
 	});
 	$('#text-container').animate({
-		"width": textWidth,
-		"height": textHeight
+		"width": textBoxWidth,
+		"height": boxHeight
 	}, function() {
-		$(selectedEle).children('ul').removeClass('hidden');
+		$('#'+TargId+'-text').children('ul').removeClass('hidden');
+		
 	});
 }
-// Displays both tabs of information
-function doubleViewer() {
-	var containerWidth = fullWidth-viewerButtonWidth
-	var textBox = containerWidth/2-4
-	var leftShift = -(containerWidth/2)-(viewerButtonWidth/2-(viewerButtonXadjust))
-	var rightShift = (containerWidth/2)-(viewerButtonWidth/2+(viewerButtonXadjust))
-	$('.text-box').addClass('double-view');
-	$('#left-text').addClass('shift-left');
-	$('#right-text').addClass('shift-right');
-	animateButtons(leftShift, rightShift, bottomShift, bottomAcrossDouble);
-	$('#left-text').animate({
-		"width": textBox,
-		"height": fullHeight
-	});
-	$('#right-text').animate({
-		"width": textBox,
-		"height": fullHeight
-	});
-	$('#text-container').animate({
-		"width": containerWidth,
-		"height": fullHeight
-	}, function() {
-		$('.text-box').children('ul').removeClass('hidden');
-		bottomButton('#all-button', '#none-button');
-	});
-}
-// Closes all tabs
-function closeViewer(fullClose, viewer, selectedEle) {
-	animateButtons(-(viewerButtonWidth+buttonSpacing), 0, 0, bottomAcross);
+function closeViewer() {
 	function minimiseEle(thisEle) {
 		$(thisEle).animate({
 			"width": 0,
 			"height": 0
 		});
+		$(thisEle).children('ul').addClass('hidden');
 	}
-	minimiseEle('#left-text');
-	minimiseEle('#right-text');
-	$('#left-text').children('ul').addClass('hidden');
-	$('#right-text').children('ul').addClass('hidden');
+	minimiseEle('#left-button-text');
+	minimiseEle('#right-button-text');
+
 	$('#text-container').animate({
 		"width": 0,
 		"height": 0
 	}, function () {
 		bottomButton('#none-button', '#all-button');
-		$('.text-box').removeClass('double-view');
-		$('#left-text').removeClass('shift-left');
-		$('#right-text').removeClass('shift-right');
-		if (fullClose === false) {
-			if (viewer === 'single') {
-				singleViewer(selectedEle);
-			} else {
-				doubleViewer();	
-			};
-		};
 	});
 }
-// Moves buttons based on arguments
-function animateButtons(leftShift, rightShift, bottomShift, bottomX) {
-	$('#left-button').animate({"margin-left":leftShift});
-	$('#right-button').animate({"margin-left":rightShift});
-	$('#all-button').animate({
-		"margin-top": bottomShift,
-		"margin-left": bottomX
+
+// Displays both tabs of information
+function doubleViewer() {
+	var textBox = textBoxWidth/2-4
+	var leftShift = -(textBoxWidth/2)-(viewerButtonWidth/2)
+	var rightShift = (textBoxWidth/2)-(viewerButtonWidth/2)
+	$('.text-box').addClass('double-view');
+	$('#left-button-text').addClass('shift-left');
+	$('#right-button-text').addClass('shift-right');
+	$('#left-button-text').animate({
+		"width": textBox,
+		"height": allTextBoxHeight
 	});
-	$('#none-button').animate({
-		"margin-top": bottomShift,
-		"margin-left": bottomX
+	$('#right-button-text').animate({
+		"width": textBox,
+		"height": allTextBoxHeight
+	});
+	$('#text-container').animate({
+		"width": textBoxWidth,
+		"height": allTextBoxHeight
+	}, function() {
+		$('.text-box').children('ul').removeClass('hidden');
+		bottomButton('#all-button', '#none-button');
 	});
 }
+
 // Selects which bottom button to show
 function bottomButton(hideThis, showThis) {
 	$(hideThis).addClass('hidden');
 	$(showThis).removeClass('hidden');
 }
+
+
+
+
+
+
+
+
+
+
